@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -48,9 +50,32 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'pushed times:',
+              ),
+              bytes!=null ? Image.memory(bytes):Icon(Icons.error),
+            ],
+          ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: cropImage,
+          tooltip: 'Choose Image',
+          child: Icon(Icons.add),
+        ), //
       ),
     );
+  }
+  Uint8List bytes;
+  cropImage() async {
+     ByteData data = await FlutterSmartCropper.cropImage();
+     bytes = Uint8List.view(data.buffer);
+     setState(() {
+
+     });
   }
 }
