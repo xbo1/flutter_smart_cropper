@@ -1,8 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.xbo1.flutter_smart_cropper">
     <application>
-        <activity
-            android:name=".CropActivity"
-            android:theme="@style/FishBunTheme"/>
     </application>
 </manifest>

@@ -1,14 +1,13 @@
 package com.xbo1.flutter_smart_cropper;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.util.HashMap;
 
@@ -19,6 +18,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import me.pqpo.smartcropperlib.SmartCropper;
 
 /** FlutterSmartCropperPlugin */
 public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegistry.ActivityResultListener,
@@ -57,33 +57,61 @@ public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegis
     }
 
     if ("cropImage".equals(call.method)) {
-      startCropImage();
+//      startCropImage();
       finishWithSuccess();
-    } else {
+    }
+    else if ("detectImageRect".equals(call.method)) {
+      String file = call.argument("file");
+      BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inJustDecodeBounds = true;
+      BitmapFactory.decodeFile(file, options);
+      int outHeight = options.outHeight;
+      int outWidth = options.outWidth;
+      options.inJustDecodeBounds = false;
+      options.inSampleSize = calculateSampleSize(options);
+      Bitmap bmp = BitmapFactory.decodeFile(file, options);
+      Point[] pts = SmartCropper.scan(bmp);
+      HashMap<String, Object> ret = new HashMap<>();
+      ret.put("tl", pt2Json(pts[0]));
+      ret.put("tr", pt2Json(pts[1]));
+      ret.put("br", pt2Json(pts[2]));
+      ret.put("bl", pt2Json(pts[3]));
+      ret.put("width", outWidth);
+      ret.put("height", outHeight);
+      pendingResult.success(ret);
+      clearMethodCallAndResult();
+    }
+    else {
       pendingResult.notImplemented();
       clearMethodCallAndResult();
     }
   }
-
-  private void startCropImage() {
-    if (ContextCompat.checkSelfPermission(this.activity,
-            Manifest.permission.READ_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this.activity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this.activity,
-            Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(this.activity,
-              new String[]{
-                      Manifest.permission.READ_EXTERNAL_STORAGE,
-                      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                      Manifest.permission.CAMERA
-              },
-              REQUEST_CODE_GRANT_PERMISSIONS);
-    } else {
-      cropImage();
-    }
+  private HashMap<String, Integer> pt2Json(Point pt) {
+    HashMap<String, Integer> ret = new HashMap<>();
+    ret.put("x", pt.x);
+    ret.put("y", pt.y);
+    return ret;
   }
+
+//  private void startCropImage() {
+//    if (ContextCompat.checkSelfPermission(this.activity,
+//            Manifest.permission.READ_EXTERNAL_STORAGE)
+//            != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this.activity,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//            != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this.activity,
+//            Manifest.permission.CAMERA)
+//            != PackageManager.PERMISSION_GRANTED) {
+//      ActivityCompat.requestPermissions(this.activity,
+//              new String[]{
+//                      Manifest.permission.READ_EXTERNAL_STORAGE,
+//                      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                      Manifest.permission.CAMERA
+//              },
+//              REQUEST_CODE_GRANT_PERMISSIONS);
+//    } else {
+//      cropImage();
+//    }
+//  }
 
   private void cropImage() {
     HashMap<String, String> options = this.methodCall.argument(ANDROID_OPTIONS);
@@ -107,8 +135,9 @@ public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegis
       file = "";
     }
 
-    CropActivity.messenger = messenger;
-    activity.startActivityForResult(CropActivity.getJumpIntent(context, channel, file), 101);
+    //不再支持
+//    CropActivity.messenger = messenger;
+//    activity.startActivityForResult(CropActivity.getJumpIntent(context, channel, file), 101);
   }
 
   @Override
@@ -124,14 +153,14 @@ public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegis
               && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
         cropImage();
       } else {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
-          finishWithError("PERMISSION_DENIED", "Read, write or camera permission was not granted");
-        } else{
-          finishWithError("PERMISSION_PERMANENTLY_DENIED", "Please enable access to the storage and the camera.");
-        }
-        return false;
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+//                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+//                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
+//          finishWithError("PERMISSION_DENIED", "Read, write or camera permission was not granted");
+//        } else{
+//          finishWithError("PERMISSION_PERMANENTLY_DENIED", "Please enable access to the storage and the camera.");
+//        }
+//        return false;
       }
       return true;
     }
@@ -168,4 +197,25 @@ public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegis
     pendingResult = result;
     return true;
   }
+
+  private int calculateSampleSize(BitmapFactory.Options options) {
+    int outHeight = options.outHeight;
+    int outWidth = options.outWidth;
+    int sampleSize = 1;
+    int destHeight = 1000;
+    int destWidth = 1000;
+    if (outHeight > destHeight || outWidth > destHeight) {
+      if (outHeight > outWidth) {
+        sampleSize = outHeight / destHeight;
+      } else {
+        sampleSize = outWidth / destWidth;
+      }
+    }
+    if (sampleSize < 1) {
+      sampleSize = 1;
+    }
+    return sampleSize;
+  }
 }
+
+
