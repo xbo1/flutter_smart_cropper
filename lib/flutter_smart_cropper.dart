@@ -52,6 +52,11 @@ class RectPoint {
     }
     return ret;
   }
+
+  @override
+  String toString() {
+    return "tl:$tl,tr:$tr,bl:$bl,br:$br,width:$width,height:$height";
+  }
 }
 
 class FlutterSmartCropper {

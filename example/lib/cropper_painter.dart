@@ -22,6 +22,10 @@ class CropperPainter extends CustomPainter {
     if (rcPoint == null) {
       return;
     }
+    canvas.drawCircle(rcPoint.tl, 5, painter);
+    canvas.drawCircle(rcPoint.tr, 5, painter);
+    canvas.drawCircle(rcPoint.br, 5, painter);
+    canvas.drawCircle(rcPoint.bl, 5, painter);
     canvas.drawLine(rcPoint.tl, rcPoint.tr, painter);
     canvas.drawLine(rcPoint.tr, rcPoint.br, painter);
     canvas.drawLine(rcPoint.br, rcPoint.bl, painter);

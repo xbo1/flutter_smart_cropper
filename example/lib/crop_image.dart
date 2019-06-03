@@ -21,7 +21,8 @@ class _CropImageState extends State<CropImage> {
   void initState() {
     super.initState();
     image = Image.file(File(widget.file));
-//    Future.delayed(Duration(milliseconds: 500), ()=> resizeRect());
+    Future.delayed(Duration(milliseconds: 500), ()=> resizeRect());
+    print(widget.rectPoint);
   }
   PS.Point offset2Point(Offset offset) {
     var newOffset = offset.scale(widget.rectPoint.width/rcPoint.width, widget.rectPoint.height/rcPoint.height);
@@ -85,7 +86,7 @@ class _CropImageState extends State<CropImage> {
   }
 
   bool hasResized = false;
-  void resizeRect(StateSetter state) {
+  void resizeRect() { //StateSetter state
     if (hasResized) {
       return;
     }
@@ -118,9 +119,11 @@ class _CropImageState extends State<CropImage> {
     rcPoint.bl = this.resizePoint(widget.rectPoint.bl, dest, src);
     rcPoint.width = dest.width.ceil();
     rcPoint.height = dest.height.ceil();
-    state(() {
+    if (mounted) {
+      setState(() {
 
-    });
+      });
+    }
   }
   Offset resizePoint(Offset pt, Size dest, Size src) {
     return pt.scale(dest.width/src.width, dest.height/src.height);
@@ -131,7 +134,7 @@ class _CropImageState extends State<CropImage> {
 
   Widget _buildCanvas() {
     return StatefulBuilder(builder: (context, state) {
-      resizeRect(state);
+//      resizeRect();
       return CustomPaint(
         painter: CropperPainter(
           rcPoint: rcPoint,
