@@ -1,8 +1,8 @@
 name: flutter_smart_cropper
-description: A new Flutter plugin.
-version: 0.0.1
-author:
-homepage:
+description: A Flutter plugin to detect object rect.
+version: 0.1.0
+author: xbo1<wangshyn@gmail.com>
+homepage: https://github.com/xbo1/flutter_smart_cropper
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -11,14 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  image: ^2.1.3
-  image_picker: ^0.6.0+8
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+  image: ^2.1.3
+  image_picker: ^0.6.0+8
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

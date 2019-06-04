@@ -1,14 +1,21 @@
 # flutter_smart_cropper
 
-A new Flutter plugin.
+A Flutter plugin use to crop largest rectangle object in picture.
+用于裁剪出图像中的最大的矩形，例如身份证，名片，文档的识别
 
-## Getting Started
+- 矩形识别iOS端使用Photos.framework中的边缘识别器，Android使用的是pqpo的[SmartCropper](https://github.com/pqpo/SmartCropper)底层用OpenCV实现
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## 使用
+flutter版本要求: 1.2
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+在pubspec.yaml添加依赖
+
+    flutter_smart_cropper: ^0.1.0
+在执行"flutter packages get"后，您可以查看包中的example，了解如何使用它。
+
+检测最大矩形代码
+```
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    String file = imageFile.path;
+    RectPoint rectPoint = await FlutterSmartCropper.detectImageRect(file);
+```
