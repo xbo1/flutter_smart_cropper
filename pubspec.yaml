@@ -1,6 +1,6 @@
 name: flutter_smart_cropper
-description: A Flutter plugin to detect object rect.
-version: 0.1.0
+description: A Flutter plugin use to detect largest rectangle object in picture.
+version: 0.1.1
 author: xbo1<wangshyn@gmail.com>
 homepage: https://github.com/xbo1/flutter_smart_cropper
 
