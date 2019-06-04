@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
+
 class RectPoint {
 //  RectPoint(Offset tl, Offset tr, Offset bl, Offset br) {
 //    this.tl = tl;
@@ -36,9 +37,12 @@ class RectPoint {
       br = pt;
     }
   }
-  double distanceSquared(Offset pt1, Offset pt2){
-    return (pt1.dx-pt2.dx)*(pt1.dx-pt2.dx) + (pt1.dy-pt2.dy)*(pt1.dy-pt2.dy);
+
+  double distanceSquared(Offset pt1, Offset pt2) {
+    return (pt1.dx - pt2.dx) * (pt1.dx - pt2.dx) +
+        (pt1.dy - pt2.dy) * (pt1.dy - pt2.dy);
   }
+
   double isMin(dtl, dtr, dbl, dbr) {
     double ret = dtl;
     if (ret > dtr) {
@@ -67,7 +71,7 @@ class FlutterSmartCropper {
     if (file == null || file.isEmpty) {
       return null;
     }
-    var params = {'file':file};
+    var params = {'file': file};
     Map ret = await _channel.invokeMethod("detectImageRect", params);
     if (ret.isNotEmpty) {
       RectPoint pt = json2RectPoint(ret);
@@ -75,7 +79,6 @@ class FlutterSmartCropper {
     }
     return null;
   }
-
 
   static Future<String> get platformVersion async {
 //    final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -130,10 +133,7 @@ class FlutterSmartCropper {
       pt.tr = Offset(br.dx, tr.dy);
       pt.bl = Offset(tl.dx, bl.dy);
       pt.br = Offset(tr.dx, br.dy);
-    }
-    else {
-
-    }
+    } else {}
     pt.width = ret["width"];
     pt.height = ret["height"];
     return pt;
