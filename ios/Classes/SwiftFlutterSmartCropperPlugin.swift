@@ -65,7 +65,7 @@ public class SwiftFlutterSmartCropperPlugin: NSObject, FlutterPlugin {
                 return
             }
             var ciImg:CIImage = CIImage.init(cgImage: img.cgImage!)
-            ciImg = CIFilter.init(name: "CIColorControls", withInputParameters: ["inputContrast":1.1,kCIInputImageKey:ciImg])?.outputImage ?? ciImg
+            ciImg = CIFilter.init(name: "CIColorControls", parameters: ["inputContrast":1.1,kCIInputImageKey:ciImg])?.outputImage ?? ciImg
             // 用高精度边缘识别器 识别特征
             let features:Array<CIRectangleFeature> = self.getDetector().features(in: ciImg) as! Array<CIRectangleFeature>
             let biggestRect = self.biggestRectangleInRectangles(rectangles: features)
