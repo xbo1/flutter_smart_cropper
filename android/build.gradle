@@ -16,6 +16,11 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        
+        flatDir {
+            dirs project(':flutter_smart_cropper').file('libs')
+            // e.g. dirs project(':url_launcher').file('libs')  - don't miss the ':'
+        }
     }
 }
 
