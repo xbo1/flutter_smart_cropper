@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'pushed times:',
+              'Click + Icon to choose Image',
             ),
             bytes!=null ? Image.memory(bytes):Icon(Icons.error),
           ],
