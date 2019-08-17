@@ -68,7 +68,7 @@ public class FlutterSmartCropperPlugin implements MethodCallHandler, PluginRegis
       int outHeight = options.outHeight;
       int outWidth = options.outWidth;
       options.inJustDecodeBounds = false;
-      options.inSampleSize = calculateSampleSize(options);
+//      options.inSampleSize = calculateSampleSize(options);
       Bitmap bmp = BitmapFactory.decodeFile(file, options);
       Point[] pts = SmartCropper.scan(bmp);
       HashMap<String, Object> ret = new HashMap<>();

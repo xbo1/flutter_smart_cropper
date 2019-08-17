@@ -1,11 +1,11 @@
 # flutter_smart_cropper_example
 
 ## 使用
-flutter版本要求: 1.2
+flutter版本要求: 1.5
 
 在pubspec.yaml添加依赖
 
-    flutter_smart_cropper: ^0.1.1
+    flutter_smart_cropper: ^0.1.2
 
 检测最大矩形代码
 ```

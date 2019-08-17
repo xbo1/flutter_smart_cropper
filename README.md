@@ -12,11 +12,11 @@ A Flutter plugin use to crop largest rectangle object in picture.
 更多使用场景参考pqpo的[SmartCropper](https://github.com/pqpo/SmartCropper)
 
 ## 使用
-flutter版本要求: 1.2
+flutter版本要求: 1.5
 
 在pubspec.yaml添加依赖
 
-    flutter_smart_cropper: ^0.1.1
+    flutter_smart_cropper: ^0.1.2
 在执行"flutter packages get"后，您可以查看包中的example，了解如何使用它。
 
 检测最大矩形代码
